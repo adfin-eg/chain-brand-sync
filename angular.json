@@ -79,6 +79,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "prebundle": { "exclude": ["@brandsync/wc"] }
+          },
           "configurations": {
             "production": {
               "buildTarget": "oms-prototype:build:production"
