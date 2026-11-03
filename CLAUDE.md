@@ -53,6 +53,8 @@ Use [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<featu
 
 ## Branches
 
+**Current phase: work and commit directly on `main`. No branches or PRs for now.** The convention below applies once this note is removed.
+
 `<type>/<feature>-<what-changes>`, using the same types as commits (`feat`, `fix`, `chore`, `docs`, `ci`). The feature is the folder name, so a branch name says which feature it touches.
 
 - Lowercase, hyphen-separated, 3-6 words. Say what the branch changes, not the whole project.
