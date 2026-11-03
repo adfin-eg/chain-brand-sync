@@ -1,0 +1,5 @@
+/* Local copy of brandsync-tokens (refresh with `npm run tokens:sync`), then prototype overrides. */
+@import './styles/tokens/tokens.css';
+@import './styles/tokens/tokens.overrides.css';
+
+html, body { margin: 0; font-family: var(--bs-font-family-base, system-ui, sans-serif); }
