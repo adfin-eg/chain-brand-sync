@@ -1,1 +1,45 @@
-<router-outlet />
+<bs-app-shell>
+  <!-- Header owns the logo (Retail, custom); drawer logo is hidden so it appears once. -->
+  <bs-navigation-header slot="header" alignment="with-navigation-drawer" aria-label="Page header">
+    <bs-logo slot="left" variant="custom" src="logos/logo-retail-light.svg" alt="EG Retail"></bs-logo>
+  </bs-navigation-header>
+  <bs-navigation-drawer slot="navigation" heading="Main Menu" [attr.show-logo]="false">
+    <bs-input slot="search" type="search" placeholder="Search menu" (bsInput)="search($event)"></bs-input>
+    @if (modules().length === 0) {
+      <p class="empty">No menu items match "{{ query() }}".</p>
+    }
+    @for (module of modules(); track module.label) {
+      @if (module.sections.length === 0) {
+        <bs-navigation-drawer-item
+          [selected]="selected().key === module.label"
+          (bsSelect)="select(module.label, module.label)"
+        >
+          <bs-icon slot="icon" [attr.name]="module.icon"></bs-icon>
+          {{ module.label }}
+        </bs-navigation-drawer-item>
+      } @else {
+        <bs-navigation-drawer-item expandable [expanded]="query().trim() !== ''">
+          <bs-icon slot="icon" [attr.name]="module.icon"></bs-icon>
+          {{ module.label }}
+          <!-- GAP: BrandSync has no section-heading element for drawers; .section-title is our own token-styled label. -->
+          @for (section of module.sections; track section.title) {
+            <div slot="children" class="section-title">{{ section.title }}</div>
+            @for (page of section.pages; track page) {
+              <bs-navigation-drawer-item
+                slot="children"
+                nested
+                [selected]="selected().key === module.label + '/' + section.title + '/' + page"
+                (bsSelect)="select(module.label + '/' + section.title + '/' + page, page)"
+              >
+                {{ page }}
+              </bs-navigation-drawer-item>
+            }
+          }
+        </bs-navigation-drawer-item>
+      }
+    }
+  </bs-navigation-drawer>
+  <div class="content">
+    <h1>{{ selected().title }}</h1>
+  </div>
+</bs-app-shell>

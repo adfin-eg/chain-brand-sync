@@ -1,0 +1,19 @@
+:host { display: block; height: 100vh; }
+.content { padding: var(--bs-spacing-300); }
+bs-logo { --bs-logo-height-custom: 32px; }
+bs-navigation-header {
+  --bs-navigation-header-padding-top: var(--bs-spacing-150);
+  --bs-navigation-header-padding-bottom: var(--bs-spacing-150);
+}
+.section-title {
+  padding: var(--bs-spacing-150) var(--bs-spacing-100) var(--bs-spacing-50) var(--bs-spacing-600);
+  color: var(--bs-text-muted);
+  font-size: var(--bs-fontsize-caption-sm);
+  font-weight: var(--bs-font-weight-bold);
+  text-transform: uppercase;
+}
+.empty {
+  margin: 0;
+  padding: var(--bs-spacing-100);
+  color: var(--bs-text-muted);
+}
