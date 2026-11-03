@@ -1,0 +1,48 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bs-spacing-150);
+  height: 100%;
+  min-height: 0;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--bs-spacing-100);
+}
+.sample { margin-inline-start: auto; align-self: center; color: var(--bs-text-muted); font-style: italic; }
+.filter { width: 14rem; }
+.viewport {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+// Virtual scroll support. The grid's own scroller is turned off so this viewport scrolls both ways.
+.grid {
+  &::part(scroller) { overflow: visible; }
+  &::part(toolbar) { position: sticky; top: 0; left: 0; z-index: 3; }
+  &::part(header) { position: sticky; top: 60px; z-index: 2; height: 56px; box-sizing: border-box; }
+  &::part(row) { position: relative; top: var(--row-offset, 0); height: 32px; box-sizing: border-box; }
+}
+.status {
+  margin: 0;
+  color: var(--bs-text-muted);
+}
+// Zero-size sticky anchor at the grid's top-left; the per-row buttons are positioned against it.
+.row-actions {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  width: 0;
+  height: 0;
+}
+.row-action {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 32px;
+}

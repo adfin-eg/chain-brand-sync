@@ -1,0 +1,89 @@
+<bs-page-header heading="Items">
+  <bs-breadcrumbs slot="breadcrumb" label="Breadcrumb" size="sm">
+    <bs-breadcrumb href="#">Items</bs-breadcrumb>
+    <bs-breadcrumb current>Items</bs-breadcrumb>
+  </bs-breadcrumbs>
+</bs-page-header>
+
+<div class="filters">
+  @for (filter of activeFilters(); track filter.key) {
+    <bs-select
+      class="filter"
+      [label]="filter.label"
+      placeholder="All"
+      [options]="options(filter)"
+      [value]="values()[filter.key] ?? ''"
+      (bsChange)="setFilter(filter.key, $event)"
+    ></bs-select>
+  }
+  @if (addableFilters().length) {
+    <bs-dropdown>
+      <bs-button slot="trigger" variant="outlined">
+        <bs-icon slot="icon" name="plus" size="sm" tone="inherit"></bs-icon>
+        Add filter
+      </bs-button>
+      <bs-menu>
+        @for (filter of addableFilters(); track filter.key) {
+          <bs-menu-item (bsSelect)="addFilter(filter)">{{ filter.label }}</bs-menu-item>
+        }
+      </bs-menu>
+    </bs-dropdown>
+  }
+  <span class="sample">Sample data</span>
+</div>
+
+@switch (state()) {
+  @case ('loading') {
+    <p class="status" role="status">Loading items…</p>
+  }
+  @case ('error') {
+    <div class="status" role="alert">
+      <p>Could not load items.</p>
+      <bs-button variant="neutral" (click)="retry()">Try again</bs-button>
+    </div>
+  }
+  @default {
+    <!-- Sample data. The filter row above covers search and filters, so the grid's own filter and density buttons are off; item search lives in the grid toolbar in place of the title. -->
+    <!-- GAP: bs-data-grid has no virtual scroll (it only scrolls sideways and pages). Rows are windowed here: only the rows near
+         the viewport are rendered, shifted into place with --row-offset, with padding-bottom for the rest. -->
+    <div class="viewport" #viewport (scroll)="onScroll($event)">
+      <div class="content">
+      <!-- GAP: bs-data-grid's row-actions button is fixed to the END of the row. For a first-column menu, a bs-dropdown per visible row
+           is laid over an empty "Actions" grid column (sticky at the left edge), aligned by the fixed row height. -->
+      @if (!actionsHidden()) {
+        <div class="row-actions">
+          @for (row of rows(); track row.id; let i = $index) {
+            <div class="row-action" [style.top.px]="actionTop(i)">
+              <bs-dropdown placement="bottom-start">
+                <bs-icon-button slot="trigger" variant="subtle" size="sm" [attr.aria-label]="'Actions for item ' + row.values['itemText']">
+                  <bs-icon name="dots-three" size="sm" tone="default"></bs-icon>
+                </bs-icon-button>
+                <bs-menu>
+                  <bs-menu-item (bsSelect)="exportItem(row.id)">Export item</bs-menu-item>
+                  <bs-menu-item (bsSelect)="copyItem(row.id)">Create copy</bs-menu-item>
+                </bs-menu>
+              </bs-dropdown>
+            </div>
+          }
+        </div>
+      }
+      <bs-data-grid
+        #grid
+        class="grid"
+        aria-label="Items"
+        heading=""
+        [columns]="columns"
+        [rows]="rows()"
+        [hideFooter]="true"
+        [hideFilter]="true"
+        [hideDensity]="true"
+        [style.--row-offset.px]="padTop()"
+        [style.padding-bottom.px]="padBottom()"
+        emptyLabel="No items match the current search and filters."
+        (bsSearch)="onSearch($event)"
+        (bsColumnsChange)="onColumnsChange($event)"
+      ></bs-data-grid>
+      </div>
+    </div>
+  }
+}
